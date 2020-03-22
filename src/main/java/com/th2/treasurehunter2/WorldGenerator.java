@@ -5,7 +5,14 @@ import java.util.concurrent.ThreadLocalRandom;
 public class WorldGenerator {
     public static final int DEFAULT_WIDTH = 60;
     public static final int DEFAULT_HEIGHT = 15;
+    public static final int SONAR_RANGE = 200;
+    public static final int DEFAULT_SONARS = 3;
+    public static final int DEFAULT_MOVES = 30; 
     private final int DEFAULT_PERCENT = 20; //percent of islands nodes
+    private final int BATTERY = 1;
+    public static final int BATTERY_INCREMENT = 1;
+    private final int SAIL = 2;
+    public static final int SAIL_INCREMENT = 5;
 
     protected Node treasure;
     protected Node boat;
@@ -17,7 +24,7 @@ public class WorldGenerator {
     }
 
     public World getWorld(){
-        return new World(map, treasure, boat);
+        return new World(map, treasure, boat, DEFAULT_MOVES, DEFAULT_SONARS);
     }
 
     private void buildMap(){
@@ -25,7 +32,11 @@ public class WorldGenerator {
         for (int x = 0; x < DEFAULT_WIDTH; x++){
             for (int y = 0; y < DEFAULT_HEIGHT; y++){
                 int random = (int)(Math.random() * 100 + 1);
-                if (random <= DEFAULT_PERCENT){
+                if (random <= BATTERY){
+                    map[y][x] = new Node(true, x, y, "battery");
+                } else if (random <= SAIL){
+                    map[y][x] = new Node(true, x, y, "sail");
+                } else if (random <= DEFAULT_PERCENT){
                     map[y][x] = new Node(false, x, y, "land");
                 } else {
                     map[y][x] = new Node(true, x, y, "water");
@@ -56,31 +67,9 @@ public class WorldGenerator {
     private void buildTreasure(Node n){
         n.type = "treasure";
         n.walkable = true;
+        n.hidden = true;
         this.treasure = n;
     }
 
-    /*
-    public String drawMap() {
-        StringBuilder sb = new StringBuilder();
-        for (int x = 0; x < DEFAULT_HEIGHT; x++) {
-            for (int y = 0; y < DEFAULT_WIDTH; y++){
-                if (map[x][y].type.equals("water")) {
-                    sb.append("W");
-                } else if (map[x][y].type.equals("land")){
-                    sb.append("L");
-                } else if (map[x][y].type.equals("boat")){
-                    sb.append("B");    
-                } else {
-                    sb.append("T");
-                }
-            }
-            sb.append("N");
-        }
-        return sb.toString();
-    } */
 
-    /*
-    public void move(String direction){
-        System.out.println(direction);
-    } */
 }

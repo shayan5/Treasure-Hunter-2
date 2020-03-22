@@ -1,7 +1,4 @@
 var stompClient = null;
-var worldMap = null;
-var boat = null;
-var treasure = null;
 
 function setConnected(connected) {
     $("#connect").prop("disabled", connected);
@@ -22,40 +19,70 @@ function connect() {
         setConnected(true);
         console.log('Connected: ' + frame);
         stompClient.subscribe('/user/queue/changes', function(jsonData){
-            updateMap(JSON.parse(jsonData.body));
+            var response = JSON.parse(jsonData.body);
+            updateState(response.state);
+            updateMoves(response.moves);
+            updateSonars(response.sonars);
+            updateMap(response.mapChanges);
         });
         stompClient.subscribe('/user/queue/reply', function (data) {
             var response = JSON.parse(data.body);
+            updateMoves(response.moves);
+            updateSonars(response.sonars);
             worldMap = JSON.parse(response.map);
-            boat = JSON.parse(response.boat);
-            treasure = JSON.parse(response.treasure);
-            drawMap();
+            drawMap(worldMap);
         });
         stompClient.send("/app/newgame", {}, '');
     });
 }
 
+function displayWin(){
+    document.getElementById("message").innerHTML = "You won! Press Start Game to play again.";
+    disconnect();
+}
+
+function displayLoss(){
+    document.getElementById("message").innerHTML = "Game Over - Press Start Game to play again.";
+    disconnect();
+}
+
+function updateState(state){
+    if (state == "won"){
+        displayWin();
+    } else if (state == "lost"){
+        displayLoss();
+    }
+}
+
+function updateMoves(moves){
+    document.getElementById("numMoves").innerHTML = moves;
+}
+
+function updateSonars(sonars){
+    document.getElementById("numSonars").innerHTML = sonars;
+}
+
 function updateMap(changes){
     for (var i = 0; i < changes.length; i++){
         var element = changes[i];
-        document.getElementById(element.y + "-" + element.x).innerHTML = "<img src='/icons/" + element.type + ".png'>";
+        if (element.inPath == true && element.type != "treasure"){
+            document.getElementById(element.y + "-" + element.x).innerHTML = "<img src='/icons/sonar.png'>";
+        } else {
+            document.getElementById(element.y + "-" + element.x).innerHTML = "<img src='/icons/" + element.type + ".png'>";
+        }
     }
 
 }
 
-function drawMap(){
+function drawMap(worldMap){
     var tbl = "<tr>"
     for (var i = 0; i < worldMap.length; i++){
         for (var j = 0; j < worldMap[0].length; j++){
             tbl += "<td id=" + i + "-" + j + ">";
-            if (worldMap[i][j].type == "water"){
-                tbl += "<img src='/icons/water.png'>";
-            } else if (worldMap[i][j].type == "land"){
-                tbl += "<img src='/icons/land.png'>";
-            } else if (worldMap[i][j].type == "boat"){
-                tbl += "<img src='/icons/boat.png'>";
-            } else if (worldMap[i][j].type == "treasure"){
-                tbl += "<img src='/icons/treasure.png'>";
+            if (worldMap[i][j].hidden == true){
+                tbl +=  "<img src='/icons/water.png'>";
+            } else {
+                tbl +=  "<img src='/icons/" + worldMap[i][j].type + ".png'>";
             }
             tbl += "</td>";
         }    
@@ -73,12 +100,8 @@ function disconnect() {
     console.log("Disconnected");
 }
 
-function sendName() {
-    stompClient.send("/app/hello", {}, JSON.stringify({'name': $("#name").val()}));
-}
-
-function showGreeting(message) {
-    $("#greetings").append("<tr><td>" + message + "</td></tr>");
+function fireSonar(){
+    stompClient.send("/app/command", {}, JSON.stringify({'command' : 'sonar'}));
 }
 
 function moveUp(){

@@ -1,10 +1,16 @@
 package com.th2.treasurehunter2;
 
-public class Node {
+public class Node implements HeapItem {
     protected boolean walkable;
+    protected boolean hidden;
     protected int x;
     protected int y;
     protected String type;
+    protected int heapIndex;
+    protected Node parent;
+    protected boolean inPath;
+    protected int gCost;
+    protected int hCost;
 
     public Node(){
         
@@ -15,6 +21,13 @@ public class Node {
         this.x = x;
         this.y = y;
         this.type = type;
+        this.inPath = false;
+        this.gCost = -1; //gcost of -1 is infinite
+        this.hidden = false;
+    }
+
+    public int getFCost(){
+        return gCost + hCost;
     }
 
     public boolean isWalkable() {
@@ -48,5 +61,37 @@ public class Node {
     public void setType(String type) {
         this.type = type;
     }
+
+    @Override
+    public int compareTo(HeapItem o) {
+        Node n = (Node) o;
+        if (getFCost() < n.getFCost()){
+            return 1;
+        } else if (getFCost() == n.getFCost() && hCost >= n.hCost){
+            return 1;
+        }
+        return 0;
+    }
+
+    @Override
+    public void setHeapIndex(int index) {
+        heapIndex = index;
+
+    }
+
+    @Override
+    public int getHeapIndex() {
+        return heapIndex;
+    }
     
+    @Override
+    public boolean equals(Object o){
+        if (o instanceof Node){
+           Node n = (Node) o;
+           if (x == n.x && y == n.y){
+               return true;
+           }
+        }
+        return false;
+    }
 }

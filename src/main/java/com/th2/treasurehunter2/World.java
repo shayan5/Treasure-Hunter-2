@@ -7,19 +7,28 @@ public class World {
     private Node[][] map;
     private Node boat;
     private Node treasure;
+    public int moves;
+    public int sonars;
+    public String state;
 
     public World(){
     }
 
-    public World(Node[][] map, Node treasure, Node boat) {
+    public World(Node[][] map, Node treasure, Node boat, int moves, int sonars) {
         this.map = map;
         this.boat = boat;
         this.treasure = treasure;
+        this.moves = moves;
+        this.sonars = sonars;
+        this.state = "play";
     }
 
     public String getJson(){
         Gson g = new Gson();
         JsonObject json = new JsonObject();
+        json.addProperty("state", state);
+        json.addProperty("moves", moves);
+        json.addProperty("sonars", sonars);
         json.addProperty("map", g.toJson(map));
         json.addProperty("boat", g.toJson(boat));
         json.addProperty("treasure", g.toJson(treasure));
