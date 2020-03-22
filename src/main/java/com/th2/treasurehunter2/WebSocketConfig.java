@@ -12,13 +12,14 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
   @Override
   public void configureMessageBroker(MessageBrokerRegistry config) {
-    config.enableSimpleBroker("/queue", "/topic");
-    config.setApplicationDestinationPrefixes("/app");
+    config.enableSimpleBroker("/queue", "/topic"); // server sends to here
+    config.setApplicationDestinationPrefixes("/app"); // client sends to here
   }
 
   @Override
   public void registerStompEndpoints(StompEndpointRegistry registry) {
     registry.addEndpoint("/treasurehunter").withSockJS();
   }
+
 
 }

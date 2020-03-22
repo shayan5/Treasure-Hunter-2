@@ -3,8 +3,8 @@ package com.th2.treasurehunter2;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class WorldGenerator {
-    private final int DEFAULT_WIDTH = 60;
-    private final int DEFAULT_HEIGHT = 15;
+    public static final int DEFAULT_WIDTH = 60;
+    public static final int DEFAULT_HEIGHT = 15;
     private final int DEFAULT_PERCENT = 20; //percent of islands nodes
 
     protected Node treasure;
