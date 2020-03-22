@@ -1,0 +1,20 @@
+
+body {
+    margin: 25px;
+    background-color: rgb(240, 240, 240);
+    font-family: arial, sans-serif;
+    font-size: 14px;
+  }
+
+h1 {
+    color: red;
+}
+
+img {
+  width: 25px;
+  height: 25px;
+}
+
+table, th, td {
+    border: 1px solid black;
+  }
