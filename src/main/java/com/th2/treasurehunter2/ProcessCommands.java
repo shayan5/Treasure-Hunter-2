@@ -52,6 +52,7 @@ public class ProcessCommands {
                 boat.y = newY;
                 world.setMap(map);
                 world.setBoat(boat);
+                changes.updateBoat(boat);
             }
             changes = updateMoves(world, changes, -1);
         }

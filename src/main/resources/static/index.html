@@ -28,15 +28,21 @@
     </div>
 </div>
 
-<div>
-    <table id="grid"></table>
+<div id="wrapper">
+    <div id="left">
+        <table id="grid"></table>
+    </div>
+    <h3 id="message"></h3>
+    <div id="right">
+        <div id='canvasDiv'></div>
+        <h3>Moves: <p id="numMoves"></p></h3>
+        <h3>Sonars: <p id="numSonars"></p></h3>
+        <div>
+            <button id="sonar" type="button" onclick="fireSonar()">Sonar</button>
+        </div>
+    </div>
 </div>
-<div>
-    <button id="sonar" type="button" onclick="fireSonar()">Sonar</button>
-</div>
-<h3>Moves: </h3><p id="numMoves"></p>
-<h3>Sonars: </h3><p id="numSonars"></p>
-<h3 id="message"></h3>
+<div id='overWorld'></div>
 <p>All icons are courtesy of <a href="https://icons8.com/icons">icons8</a></p>
 </body>
 </html>
