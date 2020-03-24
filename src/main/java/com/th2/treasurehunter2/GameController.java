@@ -1,7 +1,5 @@
 package com.th2.treasurehunter2;
 
-import com.google.gson.Gson;
-
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.annotation.SendToUser;
@@ -16,7 +14,7 @@ public class GameController {
   public String processCommand(Command command, SimpMessageHeaderAccessor headerAccessor){
     World world = (World) headerAccessor.getSessionAttributes().get("world");
     WorldDelta changes = ProcessCommands.processCommand(command, world);
-    return new Gson().toJson(changes);
+    return changes.getJson();
   }
 
   @MessageMapping("/newgame")

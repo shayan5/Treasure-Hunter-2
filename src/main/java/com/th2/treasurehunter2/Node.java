@@ -1,15 +1,21 @@
 package com.th2.treasurehunter2;
 
+import com.google.gson.annotations.Expose;
+
 public class Node implements HeapItem {
     protected boolean walkable;
-    protected boolean hidden;
-    protected int x;
-    protected int y;
-    protected String type;
+    @Expose protected boolean hidden;
+    @Expose protected int x;
+    @Expose protected int y;
+    @Expose protected String type;
+    @Expose(serialize = false) 
     protected int heapIndex;
+    @Expose(serialize = false) 
     protected Node parent;
-    protected boolean inPath;
+    @Expose protected boolean inPath;
+    @Expose(serialize = false) 
     protected int gCost;
+    @Expose(serialize = false) 
     protected int hCost;
 
     public Node(){

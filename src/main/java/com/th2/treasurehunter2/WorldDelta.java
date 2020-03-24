@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 
 public class WorldDelta {
@@ -30,12 +31,13 @@ public class WorldDelta {
     }
 
     public String getJson(){
+        Gson g = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
         JsonObject json = new JsonObject();
-        json.addProperty("boat", new Gson().toJson(boat));
+        json.addProperty("boat", g.toJson(boat));
         json.addProperty("state", state);
         json.addProperty("moves", moves);
         json.addProperty("sonars", sonars);
-        json.addProperty("mapChanges", new Gson().toJson(mapChanges));
+        json.addProperty("mapChanges", g.toJson(mapChanges));
         return json.toString();
     }
 }

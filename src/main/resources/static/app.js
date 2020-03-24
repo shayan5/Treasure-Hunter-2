@@ -26,7 +26,7 @@ function connect() {
             var response = JSON.parse(jsonData.body);
             updateMoves(response.moves);
             updateSonars(response.sonars);
-            boat = response.boat;
+            boat = JSON.parse(response.boat);
             updateMap2(response.mapChanges);
             updateState(response.state);
             //drawOverWorld();
@@ -63,7 +63,7 @@ function drawCanvas(){
             var colour = 'blue';
             if (element.type == "boat"){
                 colour = 'black';
-            } else if (element.type == "treasure" && element.hidden == false){
+            } else if (element.type == "treasure" /*&& element.hidden == false*/){
                 colour = 'yellow';
             } else if (element.inPath == true){
                 colour = 'white';
@@ -136,6 +136,7 @@ function updateSonars(sonars){
 }
 
 function updateMap2(changes){
+    var changes = JSON.parse(changes);
     for (var i = 0; i < changes.length; i++){
         var element = changes[i];
         worldMap[element.y][element.x] = element;

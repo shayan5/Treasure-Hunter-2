@@ -24,7 +24,7 @@ public class World {
     }
 
     public String getJson(){
-        Gson g = new Gson();
+        Gson g = new Gson().newBuilder().excludeFieldsWithoutExposeAnnotation().create();
         JsonObject json = new JsonObject();
         json.addProperty("state", state);
         json.addProperty("moves", moves);
