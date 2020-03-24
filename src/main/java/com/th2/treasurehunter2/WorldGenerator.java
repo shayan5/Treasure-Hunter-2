@@ -5,13 +5,9 @@ import java.util.concurrent.ThreadLocalRandom;
 public class WorldGenerator {
     public static final int DEFAULT_WIDTH = 60;
     public static final int DEFAULT_HEIGHT = 15;
-    public static final int SONAR_RANGE = 100;
-    public static final int DEFAULT_SONARS = 3;
-    public static final int DEFAULT_MOVES = 30; 
+    public static final int DEFAULT_MOVES = 20; 
     private final int DEFAULT_PERCENT = 20; //percent of islands nodes
-    private final int BATTERY = 1;
-    public static final int BATTERY_INCREMENT = 1;
-    private final int SAIL = 4;
+    private final int SAIL = 2;
     public static final int SAIL_INCREMENT = 5;
 
     protected Node treasure;
@@ -24,7 +20,7 @@ public class WorldGenerator {
     }
 
     public World getWorld(){
-        return new World(map, treasure, boat, DEFAULT_MOVES, DEFAULT_SONARS);
+        return new World(map, treasure, boat, DEFAULT_MOVES);
     }
 
     private void buildMap(){
@@ -32,9 +28,7 @@ public class WorldGenerator {
         for (int x = 0; x < DEFAULT_WIDTH; x++){
             for (int y = 0; y < DEFAULT_HEIGHT; y++){
                 int random = (int)(Math.random() * 100 + 1);
-                if (random <= BATTERY){
-                    map[y][x] = new Node(true, x, y, "battery");
-                } else if (random <= SAIL){
+                if (random <= SAIL){
                     map[y][x] = new Node(true, x, y, "sail");
                 } else if (random <= DEFAULT_PERCENT){
                     map[y][x] = new Node(false, x, y, "land");

@@ -11,13 +11,11 @@ public class WorldDelta {
     public List<Node> mapChanges;
     public String state;
     public int moves;
-    public int sonars;
     public Node boat;
 
     public WorldDelta(World world) {
         this.mapChanges = new ArrayList<Node>();
         this.moves = world.moves;
-        this.sonars = world.sonars;
         this.state = world.state;
         this.boat = world.getBoat();
     }
@@ -36,7 +34,6 @@ public class WorldDelta {
         json.addProperty("boat", g.toJson(boat));
         json.addProperty("state", state);
         json.addProperty("moves", moves);
-        json.addProperty("sonars", sonars);
         json.addProperty("mapChanges", g.toJson(mapChanges));
         return json.toString();
     }

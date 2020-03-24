@@ -28,24 +28,18 @@ function connect() {
         stompClient.subscribe('/user/queue/changes', function(jsonData){
             var response = JSON.parse(jsonData.body);
             updateMoves(response.moves);
-            updateSonars(response.sonars);
             boat = JSON.parse(response.boat);
             updateMap2(response.mapChanges);
             updateState(response.state);
-            //drawOverWorld();
             drawCanvas();
-            //updateMap(response.mapChanges);
         });
         stompClient.subscribe('/user/queue/reply', function (data) {
             var response = JSON.parse(data.body);
             updateMoves(response.moves);
-            updateSonars(response.sonars);
             worldMap = JSON.parse(response.map);
             boat = JSON.parse(response.boat);
-            //drawMap(worldMap);
+            drawCanvas();
             drawMap2();
-            //drawOverWorld();
-            //drawCanvas();
         });
         stompClient.subscribe('/user/queue/minimap', function(data){
             updateCanvas(JSON.parse(data.body));
@@ -85,12 +79,9 @@ function generateTable(){
 
 function drawCanvas(){
     var scale = minimapScale;
-    //alert("<canvas id='canvasMap' width='" + worldMap[0].length + "' height='" + worldMap.length +  "'></canvas>");
     document.getElementById("canvasDiv").innerHTML = "<canvas id='canvasMap' width='" + worldMap[0].length * scale+ "' height='" + worldMap.length * scale +  "'></canvas>";
-    //document.getElementById("canvasDiv").innerHTML = "<canvas id='canvasMap'</canvas>";
     const canvas = document.getElementById('canvasMap');
     const ctx = canvas.getContext('2d');
-    //ctx.scale(5, 5);
 
     for (var i = 0; i < worldMap.length; i++){
         for (var j = 0; j < worldMap[0].length; j++){
@@ -98,7 +89,7 @@ function drawCanvas(){
             var colour = 'blue';
             if (element.type == "boat"){
                 colour = 'black';
-            } else if (element.type == "treasure" /*&& element.hidden == false*/){
+            } else if (element.type == "treasure"){
                 colour = 'yellow';
             } else if (element.inPath == true){
                 colour = 'white';
@@ -130,15 +121,6 @@ function drawOverWorld(){
 }
 
 function displayTreasure(){
-    /*
-    for (var i = 0; i < worldMap.length; i++){
-        for (var j = 0; j < worldMap[0].length; j++){
-            if (worldMap[i][j].type == "treasure"){
-                worldMap[i][j].hidden = false;
-                alert(worldMap[i][j].hidden);
-            }
-        }
-    }*/
     drawMap2();
 }
 
@@ -166,9 +148,6 @@ function updateMoves(moves){
     document.getElementById("numMoves").innerHTML = moves;
 }
 
-function updateSonars(sonars){
-    document.getElementById("numSonars").innerHTML = sonars;
-}
 
 function updateMap2(changes){
     var changes = JSON.parse(changes);
@@ -179,17 +158,6 @@ function updateMap2(changes){
     drawMap2();
 }
 
-function updateMap(changes){
-    for (var i = 0; i < changes.length; i++){
-        var element = changes[i];
-        if (element.inPath == true && element.type != "treasure"){
-            document.getElementById(element.y + "-" + element.x).innerHTML = "<img src='/icons/sonar.png'>";
-        } else {
-            document.getElementById(element.y + "-" + element.x).innerHTML = "<img src='/icons/" + element.type + ".png'>";
-        }
-    }
-
-}
 
 function drawMap2(){
     var boatX = boat.x;
@@ -202,18 +170,12 @@ function drawMap2(){
             var pic = "";
             if (i < 0 || j < 0 || i >= worldMap.length || j >= worldMap[0].length){
                 pic = '/icons/bounds.png';
-            } else { //in bounds
-                if (worldMap[i][j].inPath == true && worldMap[i][j].type == "treasure"){
-                    pic = '/icons/treasure.png';
-                } else if (worldMap[i][j].inPath == true){
-                    pic =  '/icons/sonar.png';
+            } else { //in bounds 
+                if (worldMap[i][j].hidden){
+                    pic = '/icons/water.png';
                 } else {
-                    if (worldMap[i][j].hidden){
-                        pic = '/icons/water.png';
-                    } else {
-                        pic = "/icons/" + worldMap[i][j].type + ".png";
-                    }
-                }
+                    pic = "/icons/" + worldMap[i][j].type + ".png";
+                }  
             }
             $("#"+ y +"-" + x).attr("src", pic);
             x = x + 1;
@@ -222,56 +184,8 @@ function drawMap2(){
         y = y + 1;
     }
 
-    /*
-    var radius = 5;
-    var boatX = boat.x;
-    var boatY = boat.y;
-
-    var tbl = "<tr>" 
-    for (var i = boatY - radius ; i < boatY + radius; i++){
-        for (var j = boatX - radius; j < boatX + radius; j++){
-            tbl += "<td id=" + i + "-" + j + ">"; //out of bounds
-            if (i < 0 || j < 0 || i >= worldMap.length || j >= worldMap[0].length){
-                tbl +=  "<img src='/icons/bounds.png'>";
-            } else { //in bounds
-                if (worldMap[i][j].inPath == true && worldMap[i][j].type == "treasure"){
-                    tbl +=  "<img src='/icons/treasure.png'>";
-                } else if (worldMap[i][j].inPath == true){
-                    tbl +=  "<img src='/icons/sonar.png'>";
-                } else {
-                    if (worldMap[i][j].hidden){
-                        tbl +=  "<img src='/icons/water.png'>"
-                    } else {
-                        tbl +=  "<img src='/icons/" + worldMap[i][j].type + ".png'>";
-                    }
-                }
-            }
-            tbl += "</td>";
-        }
-        tbl += "</tr><tr>";
-    }
-    tbl += "</tr>";
-    document.getElementById("grid").innerHTML = tbl;
-    */
 }
 
-function drawMap(worldMap){
-    var tbl = "<tr>"
-    for (var i = 0; i < worldMap.length; i++){
-        for (var j = 0; j < worldMap[0].length; j++){
-            tbl += "<td id=" + i + "-" + j + ">";
-            if (worldMap[i][j].hidden == true){
-                tbl +=  "<img src='/icons/water.png'>";
-            } else {
-                tbl +=  "<img src='/icons/" + worldMap[i][j].type + ".png'>";
-            }
-            tbl += "</td>";
-        }    
-        tbl += "</tr><tr>";
-    }
-    tbl += "</tr>";
-    document.getElementById("grid").innerHTML = tbl;
-}
 
 function disconnect() {
     if (stompClient !== null) {
@@ -281,14 +195,9 @@ function disconnect() {
     console.log("Disconnected");
 }
 
-function fireSonar(){
-    stompClient.send("/app/command", {}, JSON.stringify({'command' : 'sonar'}));
-}
-
 function moveUp(){
     stompClient.send("/app/command", {}, JSON.stringify({'command' : 'up'}));
     stompClient.send("/app/pathfind", {}, JSON.stringify({'map': asciiMap()}));
-    //stompClient.send("/app/pathfind", {}, JSON.stringify({'nodes' : worldMap}));
 }
 
 function moveDown(){

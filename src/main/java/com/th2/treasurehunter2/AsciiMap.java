@@ -34,6 +34,6 @@ public class AsciiMap {
                 }
             }
         }
-        return new World(result, treasure, boat, WorldGenerator.DEFAULT_MOVES, WorldGenerator.DEFAULT_SONARS);
+        return new World(result, treasure, boat, WorldGenerator.DEFAULT_MOVES);
     }
 }

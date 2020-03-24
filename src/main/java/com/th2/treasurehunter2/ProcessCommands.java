@@ -15,9 +15,7 @@ public class ProcessCommands {
             changes = moveBoat(changes, world, boat.x - 1, boat.y);
         } else if (direction.equals("right")) {
             changes = moveBoat(changes, world, boat.x + 1, boat.y);
-        } else if (direction.equals("sonar")) {
-            changes = handleSonar(changes, world);
-        }
+        } 
         return changes;
     }
 
@@ -40,9 +38,7 @@ public class ProcessCommands {
             } else {
                 if (map[newY][newX].type.equals("sail")){
                     changes = updateMoves(world, changes, WorldGenerator.SAIL_INCREMENT);
-                } else if (map[newY][newX].type.equals("battery")){
-                    changes = updateSonars(world, changes, WorldGenerator.BATTERY_INCREMENT);
-                }
+                } 
                 map[boat.y][boat.x].type = "water";
                 map[boat.y][boat.x].walkable = true;
                 map[newY][newX].type = "boat";
@@ -61,43 +57,13 @@ public class ProcessCommands {
     }
 
 
-    private static WorldDelta updateSonars(World world, WorldDelta changes, int amount){
-        world.sonars += amount;
-        changes.sonars = world.sonars;
-        if (world.sonars <= 0 && world.moves <= 0){
-            changes.state = "lost";
-            return revealTreasure(changes, world);
-        }
-        return changes;
-    }
-
     private static WorldDelta updateMoves(World world, WorldDelta changes, int amount){
         world.moves += amount;
         changes.moves = world.moves;
-        if (world.sonars <= 0 && world.moves <= 0){
+        if (world.moves <= 0){
             changes.state = "lost";
             return revealTreasure(changes, world);
         }
-        return changes;
-    }
-    
-
-    private static WorldDelta handleSonar(WorldDelta changes, World world) {
-        Node boat = world.getBoat();
-        Node treasure = world.getTreasure();
-        if (world.sonars <= 0){
-            return changes;
-        }
-        if (PathFinder.getDistance(boat, treasure) <= WorldGenerator.SONAR_RANGE){        
-            try {
-                changes.mapChanges = PathFinder.findPath(boat, treasure, world);
-                changes.state = "won";
-                return revealTreasure(changes, world);
-            } catch (HeapEmptyException | HeapFullException e) {
-                e.printStackTrace();
-            }
-        }
-        changes = updateSonars(world, changes, - 1);
         return changes;
     }
 }

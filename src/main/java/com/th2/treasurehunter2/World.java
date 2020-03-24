@@ -8,18 +8,16 @@ public class World {
     private Node boat;
     private Node treasure;
     public int moves;
-    public int sonars;
     public String state;
 
     public World(){
     }
 
-    public World(Node[][] map, Node treasure, Node boat, int moves, int sonars) {
+    public World(Node[][] map, Node treasure, Node boat, int moves) {
         this.map = map;
         this.boat = boat;
         this.treasure = treasure;
         this.moves = moves;
-        this.sonars = sonars;
         this.state = "play";
     }
 
@@ -28,7 +26,6 @@ public class World {
         JsonObject json = new JsonObject();
         json.addProperty("state", state);
         json.addProperty("moves", moves);
-        json.addProperty("sonars", sonars);
         json.addProperty("map", g.toJson(map));
         json.addProperty("boat", g.toJson(boat));
         json.addProperty("treasure", g.toJson(treasure));
