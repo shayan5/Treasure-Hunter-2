@@ -2,6 +2,7 @@ var stompClient = null;
 var worldMap = null;
 var boat = null;
 var radius = 5;
+var minimapScale = 5;
 
 function setConnected(connected) {
     $("#connect").prop("disabled", connected);
@@ -44,10 +45,30 @@ function connect() {
             //drawMap(worldMap);
             drawMap2();
             //drawOverWorld();
-            drawCanvas();
+            //drawCanvas();
+        });
+        stompClient.subscribe('/user/queue/minimap', function(data){
+            updateCanvas(JSON.parse(data.body));
         });
         stompClient.send("/app/newgame", {}, '');
     });
+}
+
+function updateCanvas(data){
+    drawCanvas();
+    const canvas = document.getElementById('canvasMap');
+    const ctx = canvas.getContext('2d');
+    for (var i = 0; i < data.length; i++){
+        ctx.fillStyle = "white";
+        if (data[i].type == "boat"){
+            ctx.fillStyle = "black";
+        } else if (data[i].type == "treasure"){
+            ctx.fillStyle = "yellow";
+        }
+        ctx.fillRect(data[i].x * minimapScale, data[i].y * minimapScale, minimapScale, minimapScale);
+    }
+
+
 }
 
 function generateTable(){
@@ -63,7 +84,7 @@ function generateTable(){
 }
 
 function drawCanvas(){
-    var scale = 5;
+    var scale = minimapScale;
     //alert("<canvas id='canvasMap' width='" + worldMap[0].length + "' height='" + worldMap.length +  "'></canvas>");
     document.getElementById("canvasDiv").innerHTML = "<canvas id='canvasMap' width='" + worldMap[0].length * scale+ "' height='" + worldMap.length * scale +  "'></canvas>";
     //document.getElementById("canvasDiv").innerHTML = "<canvas id='canvasMap'</canvas>";
@@ -266,18 +287,23 @@ function fireSonar(){
 
 function moveUp(){
     stompClient.send("/app/command", {}, JSON.stringify({'command' : 'up'}));
+    stompClient.send("/app/pathfind", {}, JSON.stringify({'map': asciiMap()}));
+    //stompClient.send("/app/pathfind", {}, JSON.stringify({'nodes' : worldMap}));
 }
 
 function moveDown(){
     stompClient.send("/app/command", {}, JSON.stringify({'command' : 'down'}));
+    stompClient.send("/app/pathfind", {}, JSON.stringify({'map': asciiMap()}));
 }
 
 function moveLeft(){
     stompClient.send("/app/command", {}, JSON.stringify({'command' : 'left'}));
+    stompClient.send("/app/pathfind", {}, JSON.stringify({'map': asciiMap()}));
 }
 
 function moveRight(){
     stompClient.send("/app/command", {}, JSON.stringify({'command' : 'right'}));
+    stompClient.send("/app/pathfind", {}, JSON.stringify({'map': asciiMap()}));
 }
 
 $(function () {
@@ -288,6 +314,26 @@ $(function () {
     $( "#disconnect" ).click(function() { disconnect(); });
     $( "#send" ).click(function() { sendName(); });
 });
+
+function asciiMap(){
+    var res = [];
+    for (var i = 0; i < worldMap.length; i++){
+        var row = [];
+        for (var j = 0; j < worldMap[0].length; j++){
+            if (worldMap[i][j].type == "land"){
+                row.push("L");
+            } else if (worldMap[i][j].type == "boat"){
+                row.push("B");
+            } else if (worldMap[i][j].type == "treasure"){
+                row.push("T");
+            } else {
+                row.push("W");
+            }
+        }
+        res.push(row)
+    }
+    return res;        
+}
 
 $(document).keydown(function(e) {
     switch(e.which) {
