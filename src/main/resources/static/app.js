@@ -63,6 +63,10 @@ function drawCanvas(){
             var colour = 'blue';
             if (element.type == "boat"){
                 colour = 'black';
+            } else if (element.type == "treasure" && element.hidden == false){
+                colour = 'yellow';
+            } else if (element.inPath == true){
+                colour = 'white';
             } else if (element.type == "land"){
                 colour = 'green';
             }

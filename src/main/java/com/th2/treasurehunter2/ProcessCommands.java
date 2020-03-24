@@ -91,7 +91,7 @@ public class ProcessCommands {
             try {
                 changes.mapChanges = PathFinder.findPath(boat, treasure, world);
                 changes.state = "won";
-                return changes;
+                return revealTreasure(changes, world);
             } catch (HeapEmptyException | HeapFullException e) {
                 e.printStackTrace();
             }

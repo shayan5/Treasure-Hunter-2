@@ -13,36 +13,46 @@
 <noscript><h2 style="color: #ff0000">Seems your browser doesn't support Javascript! Websocket relies on Javascript being
     enabled. Please enable
     Javascript and reload this page!</h2></noscript>
-<div id="main-content" class="container">
-    <div class="row">
-        <div class="col-md-6">
-            <form class="form-inline">
-                <div class="form-group">
-                    <label for="connect">WebSocket connection:</label>
-                    <button id="connect" class="btn btn-default" type="submit">Start Game</button>
-                    <button id="disconnect" class="btn btn-default" type="submit" disabled="disabled">End Game
-                    </button>
-                </div>
-            </form>
+<div><p class="h1">Treasure Hunter!</p></div>  
+
+<div id="gameContainer" class="container-fliud">      
+    <div id="main-content" class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <form class="form-inline">
+                    <div class="form-group">
+                        <label for="connect">WebSocket connection:</label>
+                        <button id="connect" class="btn btn-default" type="submit">Start Game</button>
+                        <button id="disconnect" class="btn btn-default" type="submit" disabled="disabled">End Game
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
+
+    <div>
+        <h3 id="message"></h3>
+    </div>
+    <div id="gameInfo" class="container">
+        
+            <div id="left">
+                <table id="grid"></table>
+            </div>
+            
+            <div id="right">
+                <div id='canvasDiv'></div>
+                <h3>Moves: <p id="numMoves"></p></h3>
+                <h3>Sonars: <p id="numSonars"></p></h3>
+                <div>
+                    <button id="sonar" type="button" onclick="fireSonar()">Sonar</button>
+                </div>
+            </div>
+        
+    </div>
+    <div id='overWorld'></div>
 </div>
 
-<div id="wrapper">
-    <div id="left">
-        <table id="grid"></table>
-    </div>
-    <h3 id="message"></h3>
-    <div id="right">
-        <div id='canvasDiv'></div>
-        <h3>Moves: <p id="numMoves"></p></h3>
-        <h3>Sonars: <p id="numSonars"></p></h3>
-        <div>
-            <button id="sonar" type="button" onclick="fireSonar()">Sonar</button>
-        </div>
-    </div>
-</div>
-<div id='overWorld'></div>
-<p>All icons are courtesy of <a href="https://icons8.com/icons">icons8</a></p>
+<footer>All icons are courtesy of <a href="https://icons8.com/icons">icons8</a></footer>
 </body>
 </html>
