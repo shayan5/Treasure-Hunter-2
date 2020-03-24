@@ -35,6 +35,17 @@ public class World {
         return json.toString();
     }
 
+    public void cleanPathData(){
+        for (Node[] nodes : map) {
+            for (Node node : nodes) {
+                node.gCost = -1;
+                node.inPath = false;
+                node.parent = null;
+                node.heapIndex = -1;
+            }
+        }
+    }
+
     public Node[][] getMap() {
         return map;
     }

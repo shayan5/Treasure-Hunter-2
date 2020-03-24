@@ -14,7 +14,8 @@ public class GameController {
   public String processCommand(Command command, SimpMessageHeaderAccessor headerAccessor){
     World world = (World) headerAccessor.getSessionAttributes().get("world");
     WorldDelta changes = ProcessCommands.processCommand(command, world);
-    return changes.getJson();
+    String result = changes.getJson();
+    return result;
   }
 
   @MessageMapping("/newgame")

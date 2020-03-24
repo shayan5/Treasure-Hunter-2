@@ -1,5 +1,6 @@
 package com.th2.treasurehunter2;
 
+
 public class ProcessCommands {
 
     public static WorldDelta processCommand(Command command, World world) {

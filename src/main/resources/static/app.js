@@ -1,6 +1,7 @@
 var stompClient = null;
 var worldMap = null;
 var boat = null;
+var radius = 5;
 
 function setConnected(connected) {
     $("#connect").prop("disabled", connected);
@@ -17,6 +18,7 @@ function setConnected(connected) {
 
 function connect() {
     document.getElementById("message").innerHTML = "";
+    generateTable();
     var socket = new SockJS('/treasurehunter');
     stompClient = Stomp.over(socket);
     stompClient.connect({}, function (frame) {
@@ -46,6 +48,18 @@ function connect() {
         });
         stompClient.send("/app/newgame", {}, '');
     });
+}
+
+function generateTable(){
+    var tbl = "";
+    for (var i = 0; i < radius * 2; i++){
+        tbl += "<tr>"
+        for (var j = 0; j < radius * 2; j++){
+            tbl += "<td><img id='" + i + "-"+ j +"' src='/icons/bounds.png'></img></td>";
+        }
+        tbl += "</tr>";
+    }
+    document.getElementById("grid").innerHTML = tbl;
 }
 
 function drawCanvas(){
@@ -157,6 +171,37 @@ function updateMap(changes){
 }
 
 function drawMap2(){
+    var boatX = boat.x;
+    var boatY = boat.y;
+
+    var x = 0;
+    var y = 0;
+    for (var i = boatY - radius ; i < boatY + radius; i++){
+        for (var j = boatX - radius; j < boatX + radius; j++){
+            var pic = "";
+            if (i < 0 || j < 0 || i >= worldMap.length || j >= worldMap[0].length){
+                pic = '/icons/bounds.png';
+            } else { //in bounds
+                if (worldMap[i][j].inPath == true && worldMap[i][j].type == "treasure"){
+                    pic = '/icons/treasure.png';
+                } else if (worldMap[i][j].inPath == true){
+                    pic =  '/icons/sonar.png';
+                } else {
+                    if (worldMap[i][j].hidden){
+                        pic = '/icons/water.png';
+                    } else {
+                        pic = "/icons/" + worldMap[i][j].type + ".png";
+                    }
+                }
+            }
+            $("#"+ y +"-" + x).attr("src", pic);
+            x = x + 1;
+        }
+        x = 0;
+        y = y + 1;
+    }
+
+    /*
     var radius = 5;
     var boatX = boat.x;
     var boatY = boat.y;
@@ -186,6 +231,7 @@ function drawMap2(){
     }
     tbl += "</tr>";
     document.getElementById("grid").innerHTML = tbl;
+    */
 }
 
 function drawMap(worldMap){

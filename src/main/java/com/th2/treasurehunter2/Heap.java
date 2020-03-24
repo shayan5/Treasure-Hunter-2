@@ -21,6 +21,9 @@ public class Heap<T extends HeapItem> {
     }
 
     public boolean contains(T item){
+        if (item.getHeapIndex() < 0){
+            return false;
+        } 
         if (items[item.getHeapIndex()] != null){
             return items[item.getHeapIndex()].equals(item);
         } 
