@@ -4,6 +4,15 @@ var boat = null;
 var radius = 5;
 var minimapScale = 5;
 
+$( document ).ready(function(){
+    connect();
+});
+
+function resetGame(){
+    disconnect();
+    connect();
+}
+
 function setConnected(connected) {
     $("#connect").prop("disabled", connected);
     $("#disconnect").prop("disabled", !connected);
@@ -18,18 +27,16 @@ function setConnected(connected) {
 
 
 function connect() {
-    document.getElementById("message").innerHTML = "";
     generateTable();
     var socket = new SockJS('/treasurehunter');
     stompClient = Stomp.over(socket);
     stompClient.connect({}, function (frame) {
-        setConnected(true);
         console.log('Connected: ' + frame);
         stompClient.subscribe('/user/queue/changes', function(jsonData){
             var response = JSON.parse(jsonData.body);
             updateMoves(response.moves);
             boat = JSON.parse(response.boat);
-            updateMap2(response.mapChanges);
+            updateMap(response.mapChanges);
             updateState(response.state);
             drawCanvas();
         });
@@ -39,7 +46,7 @@ function connect() {
             worldMap = JSON.parse(response.map);
             boat = JSON.parse(response.boat);
             drawCanvas();
-            drawMap2();
+            drawMap();
         });
         stompClient.subscribe('/user/queue/minimap', function(data){
             updateCanvas(JSON.parse(data.body));
@@ -103,36 +110,24 @@ function drawCanvas(){
 
 }
 
-function drawOverWorld(){
-    var map = "";
-    for (var i = 0; i < worldMap.length; i++){
-        var row = "<p>"
-        for (var j = 0; j < worldMap[0].length; j++){
-            if (worldMap[i][j].type == "boat"){
-                row += "*";
-            } else {
-                row += "-";
-            }
-        }
-        row += "</p>";
-        map += row;
-    }
-    document.getElementById("overWorld").innerHTML = map;
-}
 
 function displayTreasure(){
-    drawMap2();
+    drawMap();
 }
 
 function displayWin(){
     displayTreasure();
-    document.getElementById("message").innerHTML = "You won! Press Start Game to play again.";
+    setTimeout(function() {
+        alert("You won! Press Reset to play again.");
+    },100)
     disconnect();
 }
 
 function displayLoss(){
     displayTreasure();
-    document.getElementById("message").innerHTML = "Game Over - Press Start Game to play again.";
+    setTimeout(function() {
+        alert("Game Over - You can out of moves. Press Reset to play again.");
+    },100)
     disconnect();
 }
 
@@ -149,17 +144,17 @@ function updateMoves(moves){
 }
 
 
-function updateMap2(changes){
+function updateMap(changes){
     var changes = JSON.parse(changes);
     for (var i = 0; i < changes.length; i++){
         var element = changes[i];
         worldMap[element.y][element.x] = element;
     }
-    drawMap2();
+    drawMap();
 }
 
 
-function drawMap2(){
+function drawMap(){
     var boatX = boat.x;
     var boatY = boat.y;
 
@@ -191,7 +186,6 @@ function disconnect() {
     if (stompClient !== null) {
         stompClient.disconnect();
     }
-    setConnected(false);
     console.log("Disconnected");
 }
 
@@ -219,9 +213,7 @@ $(function () {
     $("form").on('submit', function (e) {
         e.preventDefault();
     });
-    $( "#connect" ).click(function() { connect(); });
-    $( "#disconnect" ).click(function() { disconnect(); });
-    $( "#send" ).click(function() { sendName(); });
+    $( "#reset" ).click(function() { resetGame(); });
 });
 
 function asciiMap(){

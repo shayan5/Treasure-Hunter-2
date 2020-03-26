@@ -5,10 +5,10 @@ import java.util.concurrent.ThreadLocalRandom;
 public class WorldGenerator {
     public static final int DEFAULT_WIDTH = 60;
     public static final int DEFAULT_HEIGHT = 15;
-    public static final int DEFAULT_MOVES = 20; 
+    public static final int DEFAULT_MOVES = 15; 
     private final int DEFAULT_PERCENT = 20; //percent of islands nodes
-    private final int SAIL = 2;
-    public static final int SAIL_INCREMENT = 5;
+    private final int SAIL = 3;
+    public static final int SAIL_INCREMENT = 6;
 
     protected Node treasure;
     protected Node boat;

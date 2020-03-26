@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Treasure Hunter</title>
+    <link rel="shortcut icon" type="image/jpg" href="/favicon.ico"/>
     <link href="/webjars/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="/style.css" rel="stylesheet" type="text/css">
     <script src="/webjars/jquery/jquery.min.js"></script>
@@ -9,40 +11,39 @@
     <script src="/webjars/stomp-websocket/stomp.min.js"></script>
     <script src="/app.js"></script>
 </head>
+
 <body>
 <noscript><h2 style="color: #ff0000">Seems your browser doesn't support Javascript! Websocket relies on Javascript being
     enabled. Please enable
     Javascript and reload this page!</h2></noscript>
-<div><p class="h1">Treasure Hunter!</p></div>  
+
+<div id="title"><p class="h1">Treasure Hunter!</p></div>  
 
 <div id="gameContainer" class="container-fliud">      
-    <div id="main-content" class="container">
-        <div class="row">
-            <div class="col-md-6">
-                <form class="form-inline">
-                    <div class="form-group">
-                        <label for="connect">WebSocket connection:</label>
-                        <button id="connect" class="btn btn-default" type="submit">Start Game</button>
-                        <button id="disconnect" class="btn btn-default" type="submit" disabled="disabled">End Game
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
 
     <div id="gameInfo" class="container">
-        
             <div id="left">
                 <table id="grid"></table>
             </div>
             
             <div id="right">
-                <div>
-                    <h3 id="message"></h3>
+                <div id="rules">
+                    <h3>Rules:</h3>
+                    - Try to <b>find the sunken treasure</b> before your crew gets too tired!
+                    <br>- The minimap will reveal the shortest path to the treasure
+                    <br>- Use the <b>arrows keys</b> to move around
+                    <br>- Sail over the windy tiles to help your crew move!
                 </div>
                 <div id='canvasDiv'></div>
                 <h3>Moves: <p id="numMoves"></p></h3>
+
+                <form class="form-inline">
+                    <div class="form-group">
+                        <label for="connect">Game Connection:</label>
+                        <button id="reset" class="btn btn-default" type="submit">Reset
+                        </button>
+                    </div>
+                </form>
             </div>
         
     </div>
@@ -50,4 +51,5 @@
 
 <footer>All icons are courtesy of <a href="https://icons8.com/icons">icons8</a></footer>
 </body>
+
 </html>

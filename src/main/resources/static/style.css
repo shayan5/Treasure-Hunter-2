@@ -2,12 +2,16 @@
 body {
     margin: 25px;
     background-color: #f1f1f1;
-    font-family: arial, sans-serif;
+    font-family: "Arial Black", Gadget, sans-serif;
     font-size: 14px;
   }
 
 h1 {
     color: red;
+}
+
+#rules {
+  text-align: left;
 }
 
 canvas {
@@ -20,7 +24,7 @@ canvas {
 }
 
 
-#gameContainer:hover {
+div:hover {
   box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
 }
 
@@ -51,12 +55,16 @@ footer {
   flex-wrap: wrap;
 }
 
-#left {
+#left, #right {
   flex: 1;
 }
 
-#right {
-  flex: 1;
+#title, #right {
+  background-color: #e7cccc;
+}
+
+#gameInfo {
+  background-color: rgb(206, 55, 55);
 }
 
 table {
