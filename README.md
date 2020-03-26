@@ -5,6 +5,7 @@ This implementation of the A* algorithm uses the diagonal distance as the determ
 
 This is a remake of https://github.com/shayan5/TreasureHunter. Initially, the project was using a java applet based GUI which has now been deprecated on most modern browsers. As a result, I rewrote the app as an opportunity to learn Java Spring Websockets and Gradle, with the GUI rewritten in JavaScript, HTML/CSS.
 
+All icons/sprites are courtesy of https://icons8.com/. 
 
 
 
