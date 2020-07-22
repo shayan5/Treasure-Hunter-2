@@ -11,7 +11,7 @@ All icons/sprites are courtesy of https://icons8.com/.
 You will need Java8 and Gradle
 * Clone this repository
 * gradle bootRun
-* navigate to localhost:7888 on your browser
+* navigate to localhost:7888 in your web browser
 
 
 
