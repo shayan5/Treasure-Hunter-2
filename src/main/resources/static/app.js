@@ -30,8 +30,8 @@ function connect() {
     generateTable();
     var socket = new SockJS('/treasurehunter');
     stompClient = Stomp.over(socket);
+    stompClient.debug = null;
     stompClient.connect({}, function (frame) {
-        console.log('Connected: ' + frame);
         stompClient.subscribe('/user/queue/changes', function(jsonData){
             var response = JSON.parse(jsonData.body);
             updateMoves(response.moves);
@@ -186,7 +186,6 @@ function disconnect() {
     if (stompClient !== null) {
         stompClient.disconnect();
     }
-    console.log("Disconnected");
 }
 
 function moveUp(){

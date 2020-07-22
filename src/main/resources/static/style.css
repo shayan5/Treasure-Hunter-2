@@ -1,13 +1,22 @@
 
 body {
-    margin: 25px;
-    background-color: #f1f1f1;
-    font-family: "Arial Black", Gadget, sans-serif;
-    font-size: 14px;
-  }
+  background-color: #f1f1f1;
+  font-family: "Arial Black", Gadget, sans-serif;
+  font-size: 14px;
+}
 
-h1 {
-    color: red;
+#title {
+  border-style: none;
+  background-color: #f1f1f1;
+  text-align: center;
+}
+
+#title:hover {
+  box-shadow: none;
+}
+
+.heading {
+  color: black;
 }
 
 #rules {
@@ -15,12 +24,12 @@ h1 {
 }
 
 canvas {
-    padding-left: 0;
-    padding-right: 0;
-    margin-left: auto;
-    margin-right: auto;
-    display: block;
-    border: 1px solid #000000;
+  padding-left: 0;
+  padding-right: 0;
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+  border: 1px solid #000000;
 }
 
 
@@ -39,6 +48,8 @@ div {
 }
 
 #gameContainer {
+  display: block;
+  width: 80%;
   background-color: orange;
 }
 
@@ -47,20 +58,15 @@ footer {
 }
 
 #gameInfo {
+  overflow-y: auto;
   display: flex;
-}
-
-.container {
-  padding: 25px;
   flex-wrap: wrap;
 }
 
 #left, #right {
-  flex: 1;
-}
-
-#title, #right {
-  background-color: #e7cccc;
+  flex: 1 0 0;
+  margin: 5px;
+  background-color: #f1f1f1;
 }
 
 #gameInfo {
@@ -72,6 +78,5 @@ table {
 }
 
 table, th, td {
-    border: 1px solid black;
-    table-layout: auto;
-  }
+  border: 1px solid black;
+}
