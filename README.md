@@ -9,9 +9,9 @@ All icons/sprites are courtesy of https://icons8.com/.
 
 ## Quick Start
 You will need Java8 and Gradle
-* Clone this repository
-* gradle bootRun
-* navigate to localhost:7888 on your browser
+1. Clone this repository
+2. run the "gradle bootRun" command
+3. navigate to localhost:7888 in your web browser
 
 
 
